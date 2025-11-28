@@ -1,20 +1,19 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Cache global supaya tidak reload tiap request
-let words = [];
-let index = {};
+let words: string[] = [];
+let index: Record<string, string[]> = {};
 
 function loadWords() {
   if (words.length > 0) return;
 
   const filePath = path.join(__dirname, "words_alpha.txt");
-  //   console.log("Loading:", filePath);
-
   const txt = fs.readFileSync(filePath, "utf8");
   words = txt.split("\n");
 
@@ -25,13 +24,11 @@ function loadWords() {
     if (!index[f]) index[f] = [];
     index[f].push(w);
   }
-
-  //   console.log("Wordlist loaded:", words.length);
 }
 
 // Fungsi shuffle Fisher–Yates (paling efisien)
-function shuffle(arr) {
-  let a = arr.slice(); // clone supaya index tidak berubah
+function shuffle(arr: string[]): string[] {
+  const a = arr.slice(); // clone supaya index tidak berubah
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
@@ -39,15 +36,15 @@ function shuffle(arr) {
   return a;
 }
 
-export default function handler(req, res) {
-  const word = (req.query.word || "").toLowerCase();
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  const word = ((req.query.word as string) || "").toLowerCase();
   if (!word) return res.status(200).json([]);
 
   loadWords();
 
   const group = index[word[0]] || [];
 
-  // Filter dulu semua yang cocok
+  // Filter semua yang cocok
   const matches = group.filter((w) => w.startsWith(word));
 
   // Randomisasi urutan
