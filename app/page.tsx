@@ -33,7 +33,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
+    <div className="min-h-screen flex flex-col items-center justify-start p-6 bg-gray-100 dark:bg-neutral-900 text-gray-900 dark:text-gray-100 transition-colors">
       <div className="w-full max-w-md flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">English Word Suggest</h1>
         <ThemeToggle />
@@ -43,7 +43,7 @@ export default function Home() {
         value={word}
         onChange={handleChange}
         placeholder="Type a word..."
-        className="w-full max-w-md p-2 rounded border border-gray-400 dark:border-gray-600 bg-gray-200 dark:bg-gray-800 text-black dark:text-white transition-all"
+        className="w-full max-w-md p-2 rounded border border-gray-400 dark:border-neutral-600 bg-gray-200 dark:bg-neutral-800 transition-all"
       />
 
       {loading && <p className="mt-2 text-gray-500">Loading...</p>}
@@ -55,6 +55,20 @@ export default function Home() {
       {!loading && results.length === 0 && word && (
         <p className="mt-2 text-gray-500">No results</p>
       )}
+      <div className="mt-4 absolute bottom-4">
+        <p className="mt-2 text-gray-500 text-sm">
+          Created by{" "}
+          <a
+            href="https://github.com/hamma-nyk"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="text-bold underline decoration-dotted text-red-500 dark:text-yellow-500">
+              @hamma-nyk
+            </span>
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
